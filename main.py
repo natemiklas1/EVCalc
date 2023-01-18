@@ -1,44 +1,32 @@
-import sys
-
 import pywebio
-from pywebio.input import input, FLOAT
+from pywebio.input import input, input_group, FLOAT
 from pywebio.output import put_text, put_html, put_markdown, put_table
+from maths import calcEv
 
 
-def calcEv():
-    odds = input("ODDS: ")
-    wager = input("WAGER: ", type=FLOAT)
-    hitRate = input("HITRATE (%): ", type=FLOAT)
+def main():
+    data = input_group('info', [
+        input('odds (-110)', name='odds'),
+        input('wager in $ (50)', name='wager'),
+        input('Hit rate in percent (75)', name='hitrate'),
+    ])
 
-    hitRate = hitRate / 100.0
+    odds = data['odds']
+    wager = float(data['wager'])
+    hitrate = float(data['hitrate'])
 
-    if odds[0:1] not in ('+', '-'):
-        print('TRASH!')
-        sys.exit()
-
-    positive = False
-    if odds[0:1] == '+':
-        positive = True
-
-    winnings = 0
-    ratio = int(odds[1:])
-    if positive:
-        winnings = (ratio / 100.0) * wager
-    else:
-        winnings = (100.0 / ratio) * wager
-
-    part1 = winnings * hitRate
-    part2 = wager * (1.0 - hitRate)
-    ev = part1 - part2
+    ev = calcEv(hitrate, odds, wager)
 
     evPercent = ev / wager
-    print('EV: ${}'.format(round(ev, 2)))
-    print('EV: %{}'.format(round(evPercent, 2)))
-
+    evPercentString = 'EV: %{}'.format(round(evPercent, 2))
+    evString = 'EV: ${}'.format(round(ev, 2))
+    print(evString)
+    print(evPercentString)
 
     put_markdown('# **RESULTS**')
-    put_text('EV: %{}'.format(evPercent))
+    put_text(evPercentString)
+    put_text(evString)
 
 
 if __name__ == '__main__':
-    pywebio.start_server(calcEv, port=80)
+    pywebio.start_server(main, port=80, debug=True)
