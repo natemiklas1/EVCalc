@@ -2,14 +2,18 @@ import argparse
 import sys
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-bet", help="", type=str, required=True)
+parser.add_argument("-bet", help="", type=str)
 parser.add_argument("-odds", help="", type=str, required=True)
 parser.add_argument("-hitRate", help="in %", type=str, required=True)
 
 args, leftovers = parser.parse_known_args()
 
-hitRate = (int(args.hitRate) / 100.0)
-bet = args.bet
+hitRate = (float(args.hitRate) / 100.0)
+
+if args.bet:
+    bet = args.bet
+else:
+    bet = 10.0
 
 print('HitRate: {}%'.format(args.hitRate))
 
@@ -43,7 +47,7 @@ part1 = winnings * hitRate
 part2 = bet * (1.0 - hitRate)
 ev = part1 - part2
 
-evPercent = ev / bet
+evPercent = (ev / bet) * 100.0
 print('EV: ${}'.format(round(ev, 2)))
-print('EV: %{}'.format(round, evPercent))
+print('EV: %{}'.format(round(evPercent, 2)))
 # print('Total Returns: {}'.format(round(returns,2)))
