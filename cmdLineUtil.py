@@ -1,53 +1,15 @@
 import argparse
-import sys
+from maths import calcEv
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-bet", help="", type=str)
+parser.add_argument("-wager", help="", type=str)
 parser.add_argument("-odds", help="", type=str, required=True)
-parser.add_argument("-hitRate", help="in %", type=str, required=True)
+parser.add_argument("-hitrate", help="in %", type=str, required=True)
 
 args, leftovers = parser.parse_known_args()
 
-hitRate = (float(args.hitRate) / 100.0)
+ev, evPercent = calcEv(args.hitrate, args.odds, args.wager)
 
-if args.bet:
-    bet = args.bet
-else:
-    bet = 10.0
-
-print('HitRate: {}%'.format(args.hitRate))
-
-try:
-    bet = int(bet)
-except ValueError:
-    print('TRASH!')
-    sys.exit()
-print('Bet: ${}'.format(bet))
-
-if args.odds[0:1] not in ('+', '-'):
-    print('TRASH!')
-    sys.exit()
-print('Odds: {}'.format(args.odds))
-
-positive = False
-if args.odds[0:1] == '+':
-    positive = True
-
-winnings = 0
-ratio = int(args.odds[1:])
-if positive:
-    winnings = (ratio / 100.0) * bet
-else:
-    winnings = (100.0 / ratio) * bet
-
-print('Winnings: ${}'.format(round(winnings, 2)))
-
-# ev = (winnings * hitRate) + ((bet * 100.0) - hitRate)
-part1 = winnings * hitRate
-part2 = bet * (1.0 - hitRate)
-ev = part1 - part2
-
-evPercent = (ev / bet) * 100.0
 print('EV: ${}'.format(round(ev, 2)))
-print('EV: %{}'.format(round(evPercent, 2)))
+print('EV: {}%'.format(round(evPercent, 2)))
 # print('Total Returns: {}'.format(round(returns,2)))

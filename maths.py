@@ -1,31 +1,39 @@
 import sys
 
 
+def _exit():
+    print('TRASH!')
+    sys.exit()
+
+
 def calcEv(hitrate, odds, wager=10):
     try:
-        bet = int(wager)
+        hitrate = float(hitrate) / 100
     except ValueError:
-        print('TRASH!')
-        sys.exit()
+        _exit()
+    try:
+        wager = float(wager)
+    except ValueError:
+        _exit()
 
     if odds[0:1] not in ('+', '-'):
-        print('TRASH!')
-        sys.exit()
+        _exit()
 
     positive = False
     if odds[0:1] == '+':
         positive = True
 
-    winnings = 0
     ratio = int(odds[1:])
     if positive:
-        winnings = (ratio / 100.0) * bet
+        winnings = (ratio / 100.0) * wager
     else:
-        winnings = (100.0 / ratio) * bet
+        winnings = (100.0 / ratio) * wager
 
     # ev = (winnings * hitRate) + ((bet * 100.0) - hitRate)
     part1 = winnings * hitrate
-    part2 = bet * (1.0 - hitrate)
+    part2 = wager * (1.0 - hitrate)
     ev = part1 - part2
 
-    return ev
+    evPercent = ev/wager
+
+    return ev, evPercent
