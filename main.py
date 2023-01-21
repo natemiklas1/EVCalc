@@ -15,9 +15,8 @@ def main():
     wager = float(data['wager'])
     hitrate = float(data['hitrate'])
 
-    ev = calcEv(hitrate, odds, wager)
+    ev, evPercent = calcEv(hitrate, odds, wager)
 
-    evPercent = ev / wager
     evPercentString = 'EV: %{}'.format(round(evPercent, 2))
     evString = 'EV: ${}'.format(round(ev, 2))
     print(evString)

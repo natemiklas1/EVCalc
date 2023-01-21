@@ -11,5 +11,5 @@ args, leftovers = parser.parse_known_args()
 ev, evPercent = calcEv(args.hitrate, args.odds, args.wager)
 
 print('EV: ${}'.format(round(ev, 2)))
-print('EV: {}%'.format(round(evPercent, 2)))
+print('EV: {}%'.format(round(evPercent * 100, 2)))
 # print('Total Returns: {}'.format(round(returns,2)))
