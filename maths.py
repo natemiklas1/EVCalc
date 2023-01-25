@@ -6,7 +6,9 @@ def _exit():
     sys.exit()
 
 
-def calcEv(hitrate, odds, wager=10):
+def calcEv(hitrate, odds, wager=None):
+    if wager is None:
+        wager = 2
     try:
         hitrate = float(hitrate) / 100
     except ValueError:
