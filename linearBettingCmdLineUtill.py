@@ -1,7 +1,7 @@
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-odds", help="", type=str, required=True)
+parser.add_argument("-odds", help="", type=str)
 parser.add_argument("-bet", help="", type=str, required=True)
 parser.add_argument("-purse", help="", type=str, required=True)
 
@@ -9,7 +9,10 @@ args, leftovers = parser.parse_known_args()
 
 purse = float(args.purse)
 betValue = float(args.bet)
-odds = args.odds
+if args.odds is None:
+    odds = '-110'
+else:
+    odds = args.odds
 
 positive = False
 ratio = int(odds[1:])
@@ -59,7 +62,8 @@ while spent < purse:
         betList.append(betInstance)
         spent = betInstance.totalSpent
 
-
 print('\n------LIST OF BETS------')
+count = 1
 for i in betList:
-    print('Need to bet: ${}'.format(round(i.newBet, 2)))
+    print('{} ${}'.format(str(count), round(i.newBet, 2)))
+    count += 1
